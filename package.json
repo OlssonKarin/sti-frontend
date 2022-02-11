@@ -15,5 +15,11 @@
   "bugs": {
     "url": "https://github.com/OlssonKarin/sti-frontend/issues"
   },
-  "homepage": "https://github.com/OlssonKarin/sti-frontend#readme"
+  "homepage": "https://github.com/OlssonKarin/sti-frontend#readme",
+  "dependencies": {
+    "express": "^4.17.2",
+    "healthcheck": "^0.1.3",
+    "path": "^0.12.7",
+    "serve-favicon": "^2.5.0"
+  }
 }
