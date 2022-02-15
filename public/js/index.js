@@ -1,4 +1,4 @@
-const { set } = require("express/lib/application");
+/* const { set } = require("express/lib/application"); */
 
 // selecting canvas
 const canvas = document.querySelector("canvas");
