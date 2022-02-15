@@ -1,3 +1,5 @@
+const { set } = require("express/lib/application");
+
 // selecting canvas
 const canvas = document.querySelector("canvas");
 canvas.width = innerWidth;
@@ -110,5 +112,169 @@ function calculateVelocity(
   
     return velocity
   }
+
+  //Animation
+  function animate() {
+      animationId = requestAnimationFrame(animate);
+      c.fillStyle = "rgba(0,0,0,0.1)";
+      c.fillRect(0,0, canvas.width, canvas.height);
+      player.draw();
+  }
+
+  // Updates and remove particles
+  particles.forEach((particle, index) => {
+      if (particle.alpha <= 0) {
+      set.Timeout(() => {
+          particles.splice(index, 1)
+      }, 0)    
+      } else {
+          particle.update()
+      }
+  })
+
+  //Update and remove projectiles
+  particles.forEach((particle, index) => {
+      projectile.update()
+    if (
+        projectile.x + projectile.radius < 1 ||
+        projectile.x - projectile.radius > canvas.width ||
+        projectile.y + projectile.radius < 0 ||
+        projectile.y - projectile.radius > canvas.height
+      ){
+        set.Timeout(() => {
+            projectiles.splice(index, 1)
+        }, 0)    
+    }    
+})
+
+// Update & destroy enemies, create explosions & increase score
+enemies.forEach((enemy, index) => {
+    enemy.update()
+
+    // Calculate distance between player(player.x, player.y) and enemy(enemy.x, enemy.y) using Math.hypot(perpendicular, base) which gives hypotenuse / distance between them
+    const dist = Math.hypot(player.x - enemy.x, player.y - enemy.y)
+
+    // Checking if player and enemy is collided
+    if (dist - enemy.radius - player.radius < 1) {
+      stopGame()
+    }
+
+    projectiles.forEach((projectile, projectileIndex) => {
+      const dist = Math.hypot(projectile.x - enemy.x, projectile.y - enemy.y)
+
+      // When Projectiles touch Enemy
+      if (dist - enemy.radius - projectile.radius < 0) {
+        // Create Particles explosion
+        for (let i = 0; i < enemy.radius * 1; i++) {
+          particles.push(
+            new Particle(
+              projectile.x,
+              projectile.y,
+              Math.random() * 3,
+              enemy.color,
+              {
+                x: (Math.random() - 0.5) * (Math.random() * 9.8 - 0.5),
+                y: (Math.random() - 0.5) * (Math.random() * 9.8 - 0.5),
+              }
+            )
+          )
+        }
+
+        // Check if enemy is to be removed or not
+        if (enemy.radius - 10 > 10) {
+          updateScore()
+          enemy.radius -= 8
+          setTimeout(() => {
+            projectiles.splice(projectileIndex, 1)
+          }, 0)
+        } else {
+          updateScore(2.5)
+          setTimeout(() => {
+            enemies.splice(index, 1)
+            projectiles.splice(projectileIndex, 1)
+          }, 0)
+        }
+      }
+    })
+  })
+
+
+// Shoot Enemy
+function shootEnemy(e) {
+    let x = canvas.width / 2,
+    y = canvas.height / 2
+
+    v = calculateVelocity(x, y, e.clientX, e.clientY)
+    v.x *= 5.5
+    v.y *= 5.5
+
+    projectiles.push(new Shooter(x, y, 5, "white", v))
+}
+
+// Reinitializing variables for starting a new game
+function init() {
+    player = new Ball(x, y, 10, "white")
+    projectiles = []
+    enemies = []
+    particles = []
+    score = 0
+    spawnTime = 1000
+    highestEl.innerHTML = score
+    scoreEl.innerHTML = score
+    highestEl.innerHTML = highest    
+}
+
+// Stop game
+
+function stopGame() {
+    function stopGame() {
+        clearInterval(spanEnemiesInterval)
+        cancelAnimationFrame(animationId) // Exit Animation
+        canvas.removeEventListener('click', shootEnemy) // Stop Shooting
+        modelEl.style.display = 'flex' // Dialogue box
+        if (score > highest) {
+          highest = score
+          localStorage.setItem('highest', highest)
+        }
+        bigScoreEl.innerHTML = score // Poping score
+      }
+}
+
+// spawning random enemies
+
+function spanEnemies() {
+    // spawn enemy every second
+    spanEnemiesInterval = setTimeout(() => {
+        let x, y
+        const radius = Math.random() * 16 + 14
+        if (Math.random() < 0.5) {
+          x = Math.random() < 0.5 ? 0 - radius : canvas.width + radius
+          y = Math.random() * canvas.height
+        } else {
+          x = Math.random() * canvas.width
+          y = Math.random() < 0.5 ? 0 - radius : canvas.height + radius
+        }
+        const color = `hsl(${Math.floor(Math.random() * 360)}, 50%, 50%)`
+        enemies.push(new Shooter(x, y, radius, color, calculateVelocity(x, y)))
+        spanEnemies()
+      }, spawnTime)
+   
+}
+
+//start new game
+function startGame() {
+    x = canvas.width / 2
+    y = canvas.height / 2
+    canvas.addEventListener("click", shootEnemy)
+    init()
+    animate()
+    clearInterval(spanEnemiesInterval)
+    spanEnemies()
+    modelEl.style.display = "none";
+}
+
+// start game button
+startGamebtn.addEventListener("click", startGame); 
+
 
 
