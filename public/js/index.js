@@ -1,7 +1,7 @@
-const { set } = require("express/lib/application");
+
 
 // Selecting Canvas
-const canvas = document.qetElementById('canvas');
+const canvas = document.getElementById("canvas")
 canvas.width = innerWidth
 canvas.height = innerHeight
 
@@ -255,6 +255,7 @@ function spanEnemies() {
 
 // Start New Game
 function startGame() {
+  console.log("Starting game")
   x = canvas.width / 2
   y = canvas.height / 2
   canvas.addEventListener('click', shootEnemy)
