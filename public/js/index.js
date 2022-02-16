@@ -5,7 +5,7 @@ const canvas = document.querySelector('canvas')
 canvas.width = innerWidth
 canvas.height = innerHeight
 
-app.addEventListener('resize', () => {
+window.addEventListener('resize', () => {
   canvas.width = innerWidth
   canvas.height = innerHeight
   stopGame()
