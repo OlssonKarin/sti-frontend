@@ -1,7 +1,7 @@
 const { set } = require("express/lib/application");
 
 // Selecting Canvas
-const canvas = document.querySelector('canvas')
+const canvas = document.qetElementById('canvas');
 canvas.width = innerWidth
 canvas.height = innerHeight
 
