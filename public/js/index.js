@@ -205,7 +205,7 @@ function shootEnemy(e) {
   v.x *= 5.5
   v.y *= 5.5
 
-  projectiles.push(new Shooter(x, y, 5, 'white', v))
+  projectiles.push(new Shooter(x, y, 5, 'green', v))
 }
 
 // Reinitializing Variables for Starting a New Game
@@ -215,7 +215,7 @@ function init() {
   enemies = []
   particles = []
   score = 0
-  spawnTime = 1000
+  spawnTime = 2000
   highestEl.innerHTML = score
   scoreEl.innerHTML = score
   highestEl.innerHTML = highest

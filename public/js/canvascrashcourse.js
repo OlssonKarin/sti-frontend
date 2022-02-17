@@ -127,8 +127,8 @@ update(); //ritar om cirklen igen och igen. */
 
 //Animation 2 - character
 
+console.log("Loading game")
 const image = document.getElementById("source");
-
 const player = {
   w: 50,
   h: 70,
@@ -136,10 +136,11 @@ const player = {
   y: 200,
   speed: 5,
   dx: 0,
-  dx: 0,
+  dy: 0
 };
 
 function drawPlayer() {
+  
   ctx.drawImage(image, player.x, player.y, player.w, player.h);
 
 }
@@ -173,7 +174,7 @@ function detectWalls(){
 
   //Bottom wall
   if (player.y + player.h > canvas.height) {
-    player.y = canvas.height - player.y;
+    player.y = canvas.height - player.h;
   }
 
   
@@ -184,8 +185,9 @@ function update() {
   drawPlayer();
 
   newPos();
-
+  
   requestAnimationFrame(update);
+  
 }
 
 function moveUp(){
@@ -210,7 +212,7 @@ function keyDown(e){
     moveLeft();
   } 
   else if (e.key === "ArrowUp" || e.key === "Up") {
-    moveLeft();
+    moveUp();
   } 
   else if (e.key === "ArrowDown" || e.key === "Down") {
     moveDown();

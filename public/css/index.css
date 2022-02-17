@@ -12,6 +12,7 @@ body{
   background: #111111;  
 }
 
+
 #score{
   position: fixed;
   color: white;
@@ -49,7 +50,7 @@ button:focus{
   width: 100%;
   max-width: 350px;
   padding: 1.5em;
-  background: white;
+  background: green;
 }
 
 #modelEl h1{
@@ -65,7 +66,7 @@ button:focus{
   width: 100%;
   margin-top: 1.5em;
   border: none;
-  color: white;
+  color: rgb(255, 255, 255);
   cursor: pointer;
   border-radius: 2em;
   padding: 1em 2em;
