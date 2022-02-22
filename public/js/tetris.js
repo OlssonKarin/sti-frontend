@@ -21,11 +21,11 @@ const grid = 30;
         for(let y = 0; y < TetrisNextBlock.matrix[x].length; y++)
         {
           if((TetrisNextBlock.matrix[x][y]) && 
-          ((TetrisNextBlock.row + x) >= Tetrisfield.length) ||
+          (((TetrisNextBlock.row + x) >= Tetrisfield.length) ||
           (Tetrisfield[TetrisNextBlock.row + x][TetrisNextBlock.col + y]) || 
             ((TetrisNextBlock.col + y ) >= Tetrisfield[0].length) ||
             ((TetrisNextBlock.col + y) < 0)
-          )
+          ))
           {
           return false;
           }
@@ -46,8 +46,22 @@ const grid = 30;
             {
             displaygameover();
             }
+            if (gameover) return;
             Tetrisfield[TetrisNextBlock.row + x][TetrisNextBlock.col + y] = TetrisNextBlock.name;            
           }
+        }
+      }
+
+      for(let row = Tetrisfield.length-1; row >=0;){
+        if (Tetrisfield[row].every(cell => !!cell)){
+            for(let r = row; r>=0; r--){
+              for(let c = 0; c < Tetrisfield[r].length; c++){
+                Tetrisfield[r][c]= Tetrisfield[r-1][c];
+              }
+            }
+        }
+        else {
+          row--;
         }
       }
       TetrisNextBlock = getTetrisNextBlock();
@@ -74,31 +88,39 @@ const grid = 30;
     const TetrisBlock = {
       'I' : [
               [0,0,0],
-              [1,1,1]
+              [1,1,1],
+              [0,0,0]
+
             ],
       'J' : [
               [0,0,1],
-              [1,1,1]
+              [1,1,1],
+              [0,0,0]
             ],
       'L' : [
               [1,0,0],
-              [1,1,1]
+              [1,1,1],
+              [0,0,0]
             ],
       'S' : [
               [0,1,1],
-              [1,1,0]
+              [1,1,0],
+              [0,0,0]
             ],
       'Z' : [
               [1,1,0],
-              [0,1,1]
+              [0,1,1],
+              [0,0,0]
             ],
       'T' : [
               [0,1,0],
-              [1,1,1]
+              [1,1,1],
+              [0,0,0]
             ],
       'O' : [
               [1,1],
               [1,1]
+              
             ]
     };
 
@@ -106,11 +128,11 @@ const grid = 30;
 
       'I' : 'cyan', 
       'J' : 'blue',
-      'L' : 'green',
-      'O' : 'purple',
+      'L' : 'lime',
+      'O' : 'orange',
       'S' : 'red',
       'T' : 'yellow',
-      'Z' : 'orange'
+      'Z' : 'magenta'
     };
 
     const Tetrisfield = [];
@@ -177,39 +199,46 @@ const grid = 30;
       }      
     }
     
-    document.addEventListener("keydown",
-    function(e)
-    {
-      if(gameover) return;
+    document.addEventListener("keydown", (e) => {
+        console.log(e.key)      
+        if (gameover)
+          return;
 
-      if(e.key === 37) //vänster pil
-      {
-        const col = TetrisNextBlock.col;
-        TetrisNextBlock.col--;
-        if(!validmove())
+        if (e.key === "ArrowLeft") { //vänster pil
+          console.log("Vänster")
+          const col = TetrisNextBlock.col;
+          TetrisNextBlock.col--;
+          if (!validmove()) {
+            TetrisNextBlock.col = col;
+          }
+        } else if (e.key === "ArrowRight") //höger pil
         {
-          TetrisNextBlock.col = col;
+          const col = TetrisNextBlock.col;
+          TetrisNextBlock.col++;
+          if (!validmove()) {
+            TetrisNextBlock.col = col;
+          }
         }
-      }
 
-      if(e.key === 39) //höger pil
-      {
-        const col = TetrisNextBlock.col;
-        TetrisNextBlock.col++;
-        if(!validmove())
-        {
-          TetrisNextBlock.col = col;
+        if (e.key === "ArrowDown") {//nedåt pil
+          const row = TetrisNextBlock.row;
+          TetrisNextBlock.row++;
+          if (!validmove()) {
+            TetrisNextBlock.row = row;
+          }
         }
-      }
 
-      if(e.key === 40) //nedåt pil
-      {
-        const row = TetrisNextBlock.row;
-        TetrisNextBlock.row++;
-        if(!validmove())
-        {
-          TetrisNextBlock.row = row;
-        }
+        if(e.key === "ArrowUp") {// rotera tetrisblock 90 grader
+          const matrix = TetrisNextBlock.matrix;
+
+          const N = TetrisNextBlock.matrix.length -1;
+          const result = TetrisNextBlock.matrix.map((row,i) =>
+          row.map((val, j) => TetrisNextBlock.matrix[N-j][i]));
+
+          TetrisNextBlock.matrix = result;
+          if(!validmove()){
+            TetrisNextBlock.matrix = matrix;
+          }
       }
     }
     );
