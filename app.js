@@ -10,7 +10,7 @@ app.use('healthcheck', require('./routes/healthcheck.routes'));
 app.use(express.static('public'))
 
 app.get('/', function(req, res){
-    res.sendFile(__dirname + "/public/index.html")
+    res.sendFile(__dirname + "/public/tetris.html")
 
 })
 
