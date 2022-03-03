@@ -15,13 +15,11 @@ body{
 #canvas{
   background: #111111;  
 }
-
-/* background{
-  color: #333333;
+canvas {
+  width: 100%;
+  height: 100%;
   overflow: hidden;
-  background: #111111;
-} */
-
+}
 
 #score{
   position: fixed;
@@ -88,8 +86,3 @@ button:focus{
   opacity: 0.8;
 }
 
-canvas {
-  width: 100%;
-  height: 100%;
-  overflow: hidden;
-}
